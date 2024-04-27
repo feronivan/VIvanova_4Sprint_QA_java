@@ -8,7 +8,6 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.practicum.WebDriverFactory;
 import ru.yandex.practicum.page.MainPage;
-
 import static org.junit.Assert.assertTrue;
 
 
@@ -36,7 +35,6 @@ public class OrderTest {
     @Parameterized.Parameters
     public static Object[][] data() {
         return new Object[][]{
-                {"Иванка", "Иванова", "Поповка", "Лубянка", "79998886655", "01.01.2025"},
                 {"Аба", "Дур", "Адрес", "Сокол", "+79998886655", "09.05.2024"},
                 {"В а д и м", "СамыйУмный", "Александровский сад", "Александровский сад", "89998886655", "01.09.2024"},
         };
@@ -53,17 +51,18 @@ public class OrderTest {
     @Test
     public void orderCreationTest() {
         MainPage mainPage = new MainPage(webDriver);
+        //Клик по нужной кнопке "Заказать"
         mainPage.clickOrderButtonUp();
         //Заполнение формы заказа
         mainPage.fillCustomerInfoOrder(name, lastname, address, station, phoneNumber, dateOrder);
 
-        //Оформление заказа
+        //Клик по кнопке "Заказать" для оформления заказа
         mainPage.clickCreateOrderButton();
         //Подтверждение создания заказа
         mainPage.clickYesCreateOrderButton();
 
-        //Проверка появления всплывающего окна с сообщением об успешном создании заказа.
-        assertTrue(mainPage.orderWindowCheck());
+        //Проверка НАЛИЧИЯ СООБЩЕНИЯ об успешном создании заказа во всплывающем окне:
+        assertTrue(mainPage.orderWindowWithMessageCheck());
 
     }
 

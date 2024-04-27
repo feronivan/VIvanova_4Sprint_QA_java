@@ -10,9 +10,9 @@ import static java.time.Duration.ofSeconds;
 public class MainPage {
     private final WebDriver webDriver;
 
-    //Главная страница. Кнопка "Заказать" верхняя:
+    //Локатор кнопки "заказать" верхней на главной странице:
     private final By orderButtonUpLocator = By.xpath("//div[contains(@class, 'Header')]/button[text()='Заказать']");
-    //Главная страница. Кнопка "Заказать" нижняя:
+    //Локатор кнопки "заказать" нижней на главной странице:
     private final By orderButtonDownLocator = By.xpath("//div[contains(@class, 'Home')]/button[text()='Заказать']");
     //Форма заказа. Поле ввода "Имя":
     private final By nameInputLocator = By.xpath("//input[@placeholder='* Имя']");
@@ -38,34 +38,42 @@ public class MainPage {
     private final By createOrderButtonLocator = By.xpath("//div[@class='Order_Buttons__1xGrp']/button[text()='Заказать']");
     //Форма заказа. Кнопка "Да" для подтверждения оформления заказа:
     private final By yesCreateOrderButtonLocator = By.xpath("//button[text()='Да']");
-    //Форма заказа. Всплывающего окна с сообщением об успешном создании заказа:
-    private final By orderWindowLocator = By.xpath("//div[@class='Order_Modal__YZ-d3']");
+    //Локатор сообщения об успешном создании заказа во всплывающем окне:
+    private final By orderWindowWithMessageLocator = By.xpath("//div[@class='Order_ModalHeader__3FDaJ']");
     //Cookies. Кнопка соглашающаяся с куки "да все привыкли":
     private final By cookiesButtonLocator = By.xpath("//button[text()='да все привыкли']");
     //Главная страница. Локатор вопросов выпадающего списка в разделе «Вопросы о важном»:
     private final String questionLocator = "accordion__heading-%s";
     //Главная страница. Локатор ответов выпадающего списка в разделе «Вопросы о важном»:
     private final String answerLocator = "//div[contains(@id, 'accordion__panel-')][.='%s']";
-
+    private final By orderContentLocator = By.xpath("//div[@class='Order_Content__bmtHS']");
 
 
     public MainPage(WebDriver webDriver) {
         this.webDriver = webDriver;
     }
-    //Проверка кнопки "Заказать" верхней:
+
+
+    //Проверка работы кнопки верхней "Заказать"
     public void clickOrderButtonUp() {
         WebElement orderButtonUp = webDriver.findElement(orderButtonUpLocator);
         new WebDriverWait(webDriver, ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(orderButtonUp));
         orderButtonUp.click();
     }
 
-    //Проверка кнопки "Заказать" нижней:
+    //Проверка работы кнопки нижней "Заказать"
     public void clickOrderButtonDown() {
         WebElement orderButtonDown = webDriver.findElement(orderButtonDownLocator);
         ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView();", orderButtonDown);
         new WebDriverWait(webDriver, ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(orderButtonDown));
         orderButtonDown.click();
     }
+
+    //Кнопка "Заказать" ведет на страницу с заполнением формы заказа
+    public boolean orderContentIsDisplayedCheck() {
+        return webDriver.findElement(orderContentLocator).isDisplayed();
+    }
+
 
     //Заполнение формы заказа
     public void fillCustomerInfoOrder(String name, String lastname, String address, String station, String phoneNumber, String dateOrder) {
@@ -150,9 +158,9 @@ public class MainPage {
         yesCreateOrderButton.click();
     }
 
-    //Проверка наличия всплывающего окна с сообщением об успешном создании заказа:
-    public boolean orderWindowCheck() {
-        return webDriver.findElement(orderWindowLocator).isDisplayed();
+    //Проверка наличия сообщения об успешном создании заказа во всплывающем окне:
+    public boolean orderWindowWithMessageCheck() {
+        return webDriver.findElement(orderWindowWithMessageLocator).isDisplayed();
     }
 
 }
